@@ -32,6 +32,8 @@ Nella cartella `modelli-emclient/` ci sono due email complete, testo e pulsanti 
 
 - `cascoo-cold-A-diretta.html`
 - `cascoo-cold-B-consulenziale.html`
+- `cascoo-followup1-A-diretta.html` e `cascoo-followup1-B-consulenziale.html` (dopo 3 giorni)
+- `cascoo-followup2-A-diretta.html` e `cascoo-followup2-B-consulenziale.html` (dopo 7 giorni)
 
 Per importarle: in eM Client vai su Impostazioni > Posta > Modelli e firme > Modelli di posta > Nuovo.
 Poi clic destro nell'editor > Modifica sorgente, incolla tutto il contenuto del file e salva.
