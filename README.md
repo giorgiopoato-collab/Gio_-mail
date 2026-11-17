@@ -25,3 +25,14 @@ Il lead deve solo compilare le righe e premere invio. Così le richieste ti arri
   Su webmail senza app predefinita il clic può non aprire nulla.
 - Con un link email non puoi sapere chi ha cliccato senza inviare. Se ti serve tracciare i clic,
   il passo successivo è sostituire i link con un modulo (ad esempio un modulo HubSpot).
+
+## Modelli per eM Client
+
+Nella cartella `modelli-emclient/` ci sono due email complete, testo e pulsanti insieme, con le richieste indirizzate a poato@cascoo.eu:
+
+- `cascoo-cold-A-diretta.html`
+- `cascoo-cold-B-consulenziale.html`
+
+Per importarle: in eM Client vai su Impostazioni > Posta > Modelli e firme > Modelli di posta > Nuovo.
+Poi clic destro nell'editor > Modifica sorgente, incolla tutto il contenuto del file e salva.
+Prima di ogni invio sostituisci [Nome], [Azienda], [carrelli / macchinari / attrezzature] e [telefono].
