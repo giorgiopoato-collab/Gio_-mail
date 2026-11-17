@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generatore pulsanti email</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #ffffff; --text: #1d2330; --muted: #5d6677;
+    --border: #d9dde4; --accent: #1f5fae; --ok: #1d7a46;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .card h2 { font-size: 15px; margin: 0 0 14px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  label { display: block; font-weight: 600; font-size: 13px; margin: 12px 0 4px; }
+  label:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=email], select, textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font: inherit; background: #fff; color: var(--text);
+  }
+  input[type=color] { width: 48px; height: 34px; border: 1px solid var(--border); border-radius: 6px; padding: 2px; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .checks label { font-weight: 400; display: flex; gap: 8px; align-items: center; margin: 6px 0; }
+  .preview { border: 1px dashed var(--border); border-radius: 8px; padding: 20px; background: #fff; overflow-x: auto; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  button { font: inherit; font-weight: 600; padding: 10px 16px; border-radius: 6px; cursor: pointer;
+           border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+  button.secondary { background: #fff; color: var(--accent); }
+  .msg { color: var(--ok); font-weight: 600; min-height: 1.5em; margin-top: 8px; }
+  textarea.code { font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; height: 160px; margin-top: 14px; }
+  .how { margin-top: 20px; }
+  .how ol { margin: 0; padding-left: 20px; }
+  .how li { margin: 6px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pulsanti di richiesta per email ai lead</h1>
+  <p class="sub">Compila a sinistra, copia il blocco e incollalo nella tua email. Il lead clicca e gli si apre un'email già compilata per te.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Impostazioni</h2>
+
+      <label for="to">Email dove ricevi le richieste</label>
+      <input id="to" type="email" placeholder="nome@azienda.com">
+
+      <label for="me">Il tuo nome <span class="hint">(per il saluto)</span></label>
+      <input id="me" type="text" placeholder="Giorgio">
+
+      <label for="lead">Azienda del lead <span class="hint">(facoltativo, va nell'oggetto)</span></label>
+      <input id="lead" type="text" placeholder="Rossi Meccanica Srl">
+
+      <label for="intro">Frase sopra i pulsanti</label>
+      <select id="intro">
+        <option value="dir-tu">Diretta, tu</option>
+        <option value="dir-lei">Diretta, Lei</option>
+        <option value="con-tu">Consulenziale, tu</option>
+        <option value="con-lei">Consulenziale, Lei</option>
+        <option value="none">Nessuna frase</option>
+      </select>
+
+      <label>Pulsanti da mostrare</label>
+      <div class="checks">
+        <label><input type="checkbox" id="b-camp" checked> Campionatura</label>
+        <label><input type="checkbox" id="b-prev" checked> Preventivo</label>
+        <label><input type="checkbox" id="b-vis" checked> Visita in sede</label>
+      </div>
+
+      <label>Colore pulsanti</label>
+      <div class="row">
+        <input id="color" type="color" value="#1f5fae">
+        <span class="hint" id="colorHex">#1f5fae</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Anteprima (prova a cliccare)</h2>
+        <div class="preview" id="preview"></div>
+        <div class="actions">
+          <button id="copyRich">Copia per Gmail / Outlook</button>
+          <button id="copyHtml" class="secondary">Copia codice HTML</button>
+        </div>
+        <div class="msg" id="msg"></div>
+        <textarea class="code" id="code" readonly></textarea>
+      </div>
+
+      <div class="card how">
+        <h2>Come usarlo</h2>
+        <ol>
+          <li><b>Gmail / Outlook:</b> premi "Copia per Gmail / Outlook" e incolla (Ctrl+V) nel corpo dell'email, sotto il tuo testo.</li>
+          <li><b>HubSpot, Mailchimp, Brevo, firma email:</b> premi "Copia codice HTML" e incollalo in un blocco HTML del template.</li>
+          <li>Prima di usarlo con i lead, mandalo a te stesso e prova i tre pulsanti da telefono e da PC.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+const INTRO = {
+  "dir-tu":  "Se vuoi vedere il prodotto dal vivo, scegli da dove partire. Un clic e la richiesta mi arriva già compilata.",
+  "dir-lei": "Se vuole vedere il prodotto dal vivo, scelga da dove partire. Un clic e la richiesta mi arriva già compilata.",
+  "con-tu":  "Chi valuta un nuovo fornitore di solito parte da una di queste tre cose. Scegli quella che ti serve: l'email è già pronta, devi solo premere invio.",
+  "con-lei": "Chi valuta un nuovo fornitore di solito parte da una di queste tre cose. Scelga quella che le serve: l'email è già pronta, deve solo premere invio.",
+  "none": ""
+};
+
+function requests(me, lead) {
+  const saluto = me ? `Buongiorno ${me},` : "Buongiorno,";
+  const az = lead || "";
+  const suffix = lead ? ` - ${lead}` : "";
+  return [
+    { id: "b-camp", label: "Richiedi campionatura",
+      subject: `Richiesta campionatura${suffix}`,
+      body: [saluto, "", "vorrei ricevere una campionatura.", "",
+             `Azienda: ${az}`, "Referente:", "Articolo/i di interesse:", "Indirizzo di spedizione:", "", "Grazie"] },
+    { id: "b-prev", label: "Richiedi preventivo",
+      subject: `Richiesta preventivo${suffix}`,
+      body: [saluto, "", "vorrei ricevere un'offerta.", "",
+             `Azienda: ${az}`, "Referente e telefono:", "Articolo/i:", "Quantità annua indicativa:", "Tempi di consegna richiesti:", "", "Grazie"] },
+    { id: "b-vis", label: "Fissa una visita in sede",
+      subject: `Richiesta visita in sede${suffix}`,
+      body: [saluto, "", "mi interessa fissare una visita presso la nostra sede.", "",
+             `Azienda: ${az}`, "Indirizzo sede:", "Referente e telefono:", "Giorni / fasce orarie preferite:", "Cosa vorremmo vedere o discutere:", "", "Grazie"] }
+  ];
+}
+
+function esc(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function mailto(to, subject, bodyLines) {
+  // CRLF per compatibilità con Outlook
+  return "mailto:" + encodeURIComponent(to).replace(/%40/g, "@") +
+    "?subject=" + encodeURIComponent(subject) +
+    "&body=" + encodeURIComponent(bodyLines.join("\r\n"));
+}
+
+function build() {
+  const to = $("to").value.trim() || "tua-email@azienda.com";
+  const me = $("me").value.trim();
+  const lead = $("lead").value.trim();
+  const color = $("color").value;
+  $("colorHex").textContent = color;
+  const intro = INTRO[$("intro").value];
+
+  // Stile "bulletproof": il bordo dello stesso colore fa da padding anche in Outlook desktop
+  const btn = (href, label) =>
+    `<a href="${esc(href)}" target="_blank" style="display:inline-block;background-color:${color};` +
+    `border-top:12px solid ${color};border-bottom:12px solid ${color};border-left:20px solid ${color};border-right:20px solid ${color};` +
+    `border-radius:6px;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;` +
+    `line-height:18px;text-decoration:none;margin:0 8px 10px 0;">${esc(label)}</a>`;
+
+  const buttons = requests(me, lead)
+    .filter(r => $(r.id).checked)
+    .map(r => btn(mailto(to, r.subject, r.body), r.label))
+    .join("\n");
+
+  const introHtml = intro
+    ? `<p style="margin:0 0 14px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:22px;color:#1d2330;">${esc(intro)}</p>\n`
+    : "";
+
+  const html =
+`<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0;">
+<tr><td style="padding:0;">
+${introHtml}${buttons}
+</td></tr>
+</table>`;
+
+  $("preview").innerHTML = html;
+  $("code").value = html;
+  return html;
+}
+
+function flash(t) { $("msg").textContent = t; setTimeout(() => $("msg").textContent = "", 2500); }
+
+function needsEmail() {
+  if (!$("to").value.trim()) { flash("Inserisci prima la tua email."); $("to").focus(); return true; }
+  return false;
+}
+
+$("copyRich").addEventListener("click", async () => {
+  if (needsEmail()) return;
+  const html = build();
+  try {
+    await navigator.clipboard.write([new ClipboardItem({
+      "text/html": new Blob([html], { type: "text/html" }),
+      "text/plain": new Blob([$("preview").innerText], { type: "text/plain" })
+    })]);
+    flash("Copiato. Ora incolla nel corpo dell'email.");
+  } catch (e) {
+    // Fallback: seleziona l'anteprima e copia
+    const r = document.createRange(); r.selectNodeContents($("preview"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    document.execCommand("copy"); s.removeAllRanges();
+    flash("Copiato. Ora incolla nel corpo dell'email.");
+  }
+});
+
+$("copyHtml").addEventListener("click", async () => {
+  if (needsEmail()) return;
+  const html = build();
+  try { await navigator.clipboard.writeText(html); }
+  catch (e) { $("code").select(); document.execCommand("copy"); }
+  flash("Codice HTML copiato.");
+});
+
+document.querySelectorAll("input, select").forEach(el => el.addEventListener("input", build));
+build();
+</script>
+</body>
+</html>
