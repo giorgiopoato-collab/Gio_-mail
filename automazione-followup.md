@@ -6,7 +6,7 @@ i lead in sequenza, aggiorna la loro fase e ti prepara le attività del giorno. 
 ## Cosa fai tu
 
 1. In HubSpot, sul contatto, imposta **Sequenza Cascoo = Da contattare** e scegli la **Variante sequenza** (A diretta o B consulenziale; se la lasci vuota vale A).
-2. La mattina dopo trovi l'attività **[Sequenza] Cold email**. Manda la cold da eM Client con il modello indicato e **segna l'attività come completata**.
+2. La mattina dopo trovi l'attività **[Sequenza] Cold email**. Manda la cold da eM Client con il modello indicato (per chi ti ha già scritto l'attività indica il modello di ripresa contatto, con oggetto e data dell'ultimo scambio) e **segna l'attività come completata**.
 3. Stessa cosa per **[Sequenza] Follow-up 1** e **[Sequenza] Follow-up 2** quando compaiono.
 
 Segnare l'attività come completata è il passaggio che conta: HubSpot non registra quasi mai le email che invii da eM Client,
