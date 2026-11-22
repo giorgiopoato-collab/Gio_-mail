@@ -34,7 +34,10 @@ Nella cartella `modelli-emclient/` ci sono due email complete, testo e pulsanti 
 - `cascoo-cold-B-consulenziale.html`
 - `cascoo-followup1-A-diretta.html` e `cascoo-followup1-B-consulenziale.html` (dopo 3 giorni)
 - `cascoo-followup2-A-diretta.html` e `cascoo-followup2-B-consulenziale.html` (dopo 7 giorni)
+- `cascoo-ripresa-A-diretta.html` e `cascoo-ripresa-B-consulenziale.html` (al posto della cold, per chi ti ha già scritto: rispondi nel thread dell'ultimo scambio)
 
 Per importarle: in eM Client vai su Impostazioni > Posta > Modelli e firme > Modelli di posta > Nuovo.
 Poi clic destro nell'editor > Modifica sorgente, incolla tutto il contenuto del file e salva.
-Prima di ogni invio sostituisci [Nome], [Azienda], [carrelli / macchinari / attrezzature] e [telefono].
+Prima di ogni invio sostituisci [Nome], [Azienda], [carrelli / macchinari / attrezzature], [mese], [argomento dell'ultimo scambio] e [telefono].
+
+Per la gestione automatica di lead e follow-up in HubSpot vedi `automazione-followup.md`.
